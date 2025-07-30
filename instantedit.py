@@ -5,9 +5,9 @@ from PIL import Image
 import argparse
 import torch.nn.functional as nnf
 from typing import Optional
-import utils.ptp_utils as ptp_utils
+import utils_.ptp_utils as ptp_utils
 import numpy as np
-import utils.seq_aligner as seq_aligner
+import utils_.seq_aligner as seq_aligner
 from diffusers import  ControlNetModel
 from src.scheduler_perflow import PeRFlowScheduler
 import cv2
@@ -175,7 +175,7 @@ def main(args):
     with open(f'{args.dataset_path}/mapping_file.json', 'r') as file:
         dataset = json.load(file)
 
-    evaluator = MetricsCalculator('cuda')
+    evaluator = MetricsCalculator(device)
 
     metrics = {
         "psnr":[0,0],
@@ -269,18 +269,13 @@ def main(args):
                     metrics[keys][0] += value
                     metrics[keys][1] += 1
 
-            # samples_viz.save("test.png")
-            # import pdb
-            # pdb.set_trace()
-
-
     for keys, val in metrics.items():
         print(f"{keys}:{val[0]/val[1]}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset_path", type=str, default="/work/nvme/bcjw/yimingg8/exp/ddcm/pie")
+    parser.add_argument("--dataset_path", type=str, default="./pie")
     parser.add_argument("--num_inference_steps", type=int, default=4)
     parser.add_argument("--mask_threshold", type=float, default=1.0)
     parser.add_argument("--controlnet_conditioning_scale", type=float, default=0.0)
