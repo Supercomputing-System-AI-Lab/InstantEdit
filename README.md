@@ -47,7 +47,7 @@ python instantedit.py --dataset_path $Your PIE dataset path$
 
 ### Run Per-image editing 
 ```
-python edit.py --image_path $Your path to the image$ 
+python demo.py$ 
 ```
 
 ## Bibtex
@@ -58,6 +58,5 @@ python edit.py --image_path $Your path to the image$
 
 ## TODO List
 1. remove all hard-coding code snippet
-2. create a minimal environment file
-3. create demo/per-image editing code using gradio.
+
 

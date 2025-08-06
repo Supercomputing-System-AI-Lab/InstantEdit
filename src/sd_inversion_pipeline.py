@@ -415,7 +415,7 @@ class SDDDIMPipelineControl(StableDiffusionControlNetPipeline):
         latent_model_input = torch.cat([latent] * 2) if self.do_classifier_free_guidance else latent
         latent_model_input = self.scheduler.scale_model_input(latent_model_input, timestep)
 
-        timestep_temp = torch.tensor(timestep-125, device=latent.device)
+        timestep_temp = torch.tensor(timestep-249, device=latent.device)
        
         noise_pred = self.unet(
             latent_model_input,
