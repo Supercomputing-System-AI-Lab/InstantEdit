@@ -37,7 +37,10 @@ conda env create -f environment.yml
 conda activate InstantEdit
 ```
 ### Run PIE Evaluation
-A minimal script to run
+1. Download PIE Benchmark  
+You can download the PIE benchmark from [here](https://docs.google.com/forms/d/e/1FAIpQLSftGgDwLLMwrad9pX3Odbnd4UXGvcRuXDkRp6BT1nPk8fcH_g/viewform) by filling in the form from the original authors.
+
+2. A minimal script to run
 ```
 python instantedit.py --dataset_path $Your PIE dataset path$
 ```
