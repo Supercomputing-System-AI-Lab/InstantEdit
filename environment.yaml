@@ -1,4 +1,4 @@
-name: /work/nvme/bcjw/yimingg8/envs/renoise_env
+name: InstantEdit
 channels:
   - conda-forge
   - defaults
@@ -301,4 +301,3 @@ dependencies:
       - xxhash==3.4.1
       - yarl==1.9.4
       - zipp==3.19.2
-prefix: /work/nvme/bcjw/yimingg8/envs/renoise_env
