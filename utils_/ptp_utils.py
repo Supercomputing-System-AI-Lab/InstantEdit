@@ -80,8 +80,11 @@ def register_attention_control(model, controller):
             hidden_states = torch.bmm(attention_probs, v)
             hidden_states = attn.batch_to_head_dim(hidden_states)
 
-            # linear proj   
-            hidden_states = attn.to_out[0](hidden_states, scale=scale)
+            to_out = attn.to_out[0]
+            try:
+                hidden_states = to_out(hidden_states, scale=scale)  # works if LoRA wrapper is present
+            except TypeError:
+                hidden_states = to_out(hidden_states)               # fallback for plain Linear
             # dropout
             hidden_states = attn.to_out[1](hidden_states)
 
