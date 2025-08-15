@@ -438,10 +438,8 @@ class EditPipeline(StableDiffusionControlNetPipeline, TextualInversionLoaderMixi
         # 2. Define call parameters
         batch_size = 1 if isinstance(prompt, str) else len(prompt)
         device = self._execution_device
-        # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
-        # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
-        # corresponds to doing no classifier free guidance.
-        do_classifier_free_guidance = cfg_guidance_scale > 1.0
+        ### CFG is not important here, so we set it to true to avoid the error
+        do_classifier_free_guidance = True
 
         # 3. Encode input prompt
         text_encoder_lora_scale = (
@@ -459,27 +457,6 @@ class EditPipeline(StableDiffusionControlNetPipeline, TextualInversionLoaderMixi
         source_prompt_embeds_tuple = self.encode_prompt(
             source_prompt, device, num_images_per_prompt, do_classifier_free_guidance, positive_prompt, None
         )
-
-        # null_prompt_embeds_tuple = self.encode_prompt(
-        #     " ",
-        #     device,
-        #     num_images_per_prompt,
-        #     do_classifier_free_guidance,
-        # )
-
-
-        # if prompt_embeds_tuple[1] is not None:
-        #     prompt_embeds = torch.cat([prompt_embeds_tuple[1], prompt_embeds_tuple[0]])
-        # else:
-        #     prompt_embeds = prompt_embeds_tuple[0]
-        # if source_prompt_embeds_tuple[1] is not None:
-        #     source_prompt_embeds = torch.cat([source_prompt_embeds_tuple[1], source_prompt_embeds_tuple[0]])
-        # else:
-        #     source_prompt_embeds = source_prompt_embeds_tuple[0]
-        # if null_prompt_embeds_tuple[1] is not None:
-        #     null_prompt_embeds = torch.cat([null_prompt_embeds_tuple[1], null_prompt_embeds_tuple[0]])
-        # else:
-        #     null_prompt_embeds = null_prompt_embeds_tuple[0]
 
         prompt_embeds = prompt_embeds_tuple[0]
         source_prompt_embeds = source_prompt_embeds_tuple[0]

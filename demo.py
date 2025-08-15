@@ -96,7 +96,7 @@ def build_demo() -> gr.Blocks:
             with gr.Column(scale=1):
                 num_steps = gr.Slider(1, 50, value=4, step=1, label="Inference steps")
                 mask_thresh = gr.Slider(0.0, 1.0, value=0.4, step=0.05, label="Mask threshold")
-                cond_scale = gr.Slider(0.0, 2.0, value=0.4, step=0.05, label="ControlNet conditioning scale")
+                cond_scale = gr.Slider(0.0, 1.0, value=0.4, step=0.05, label="ControlNet conditioning scale")
                 dpg = gr.Slider(0.0, 5.0, value=2.0, step=0.1, label="DPG guidance weight")
                 cfg = gr.Slider(0.0, 20.0, value=1.1, step=0.1, label="CFG guidance weight")
                 seed = gr.Number(value=0, label="Seed", precision=0)
