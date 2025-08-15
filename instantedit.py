@@ -164,11 +164,29 @@ def inference(source_prompt, control_image, target_prompt, positive_prompt, nega
                    num_inference_steps=num_inference_steps,
                    cfg_guidance_scale=guidance_cfg,
                    dpg_guidance_scale=guidance_dpg,
-                   controlnet_conditioning_scale = args.controlnet_conditioning_scale,
+                   controlnet_conditioning_scale = controlnet_conditioning_scale,
                    callback = controller.step_callback
                    )
     
     return results.images[0]
+
+def invert(input_image, canny_image, num_inference_steps, controlnet_conditioning_scale):
+    res = pipe_inversion(prompt = [''],
+                            negative_prompt = [''],
+                            num_inversion_steps = num_inference_steps,
+                            num_inference_steps = num_inference_steps,
+                            image = input_image,
+                            control_image= Image.fromarray(canny_image),
+                            guidance_scale = 1.01,
+                            controlnet_conditioning_scale = controlnet_conditioning_scale,
+                        )
+                
+    latents = res[0][0]
+    all_latents = res[1]
+
+    pipe_inversion.scheduler.prev_v = None
+
+    return latents, all_latents
 
 
 def main(args):
@@ -201,8 +219,10 @@ def main(args):
     with torch.no_grad():
         for id,val in enumerate(dataset.values()):
             group = val["image_path"].split('_')[0]
-            if group not in ['0']:
-                continue
+
+            ## Uncomment this to only evaluate on specific groups
+            # if group not in ['0']:
+            #     continue
 
 
             img_path = f"{args.dataset_path}/annotation_images/{val['image_path']}"
@@ -219,18 +239,7 @@ def main(args):
 
             image = cv2.Canny(image, 100, 200)
 
-            res = pipe_inversion(prompt = [''],
-                            negative_prompt = [''],
-                            num_inversion_steps = args.num_inference_steps,
-                            num_inference_steps = args.num_inference_steps,
-                            image = input_image,
-                            control_image= Image.fromarray(image),
-                            guidance_scale = 1.01,
-                            controlnet_conditioning_scale = args.controlnet_conditioning_scale,
-                        )
-                
-            latents = res[0][0]
-            all_latents = res[1]
+            latents, all_latents = invert(input_image, image, args.num_inference_steps, args.controlnet_conditioning_scale)
 
 
             if val["blended_word"]!="":
@@ -257,14 +266,9 @@ def main(args):
                                 latents = latents,
                                 all_latents = all_latents
                             )
-           
-            
-            samples_viz = samples
-
-            pipe_inversion.scheduler.prev_v = None
 
             for keys in metrics.keys():
-                value = calculate_metric(evaluator, keys, input_image, samples_viz, mask, mask, orig_prompt, edit_prompt)
+                value = calculate_metric(evaluator, keys, input_image, samples, mask, mask, orig_prompt, edit_prompt)
                 if value != 'nan':
                     metrics[keys][0] += value
                     metrics[keys][1] += 1
@@ -277,9 +281,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_path", type=str, default="./pie")
     parser.add_argument("--num_inference_steps", type=int, default=4)
-    parser.add_argument("--mask_threshold", type=float, default=1.0)
-    parser.add_argument("--controlnet_conditioning_scale", type=float, default=0.0)
-    parser.add_argument("--dpg_weight", type=float, default=1.0)
+    parser.add_argument("--mask_threshold", type=float, default=0.4)
+    parser.add_argument("--controlnet_conditioning_scale", type=float, default=0.4)
+    parser.add_argument("--dpg_weight", type=float, default=3.0)
     parser.add_argument("--cfg_weight", type=float, default=1.1)
     args = parser.parse_args()
     main(args)

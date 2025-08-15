@@ -376,6 +376,7 @@ class SDDDIMPipelineControl(StableDiffusionControlNetPipeline):
                 latents = self.inverse_step(
                                        latents,
                                        t,
+                                       num_inversion_steps,
                                        i,
                                        prompt_embeds,
                                        added_cond_kwargs,
@@ -411,11 +412,11 @@ class SDDDIMPipelineControl(StableDiffusionControlNetPipeline):
 
 
    
-    def inverse_step(self, latent, timestep, idx, prompt_embed,added_cond_kwargs, down_res, mid_res):
+    def inverse_step(self, latent, timestep, number_of_steps, idx, prompt_embed,added_cond_kwargs, down_res, mid_res):
         latent_model_input = torch.cat([latent] * 2) if self.do_classifier_free_guidance else latent
         latent_model_input = self.scheduler.scale_model_input(latent_model_input, timestep)
 
-        timestep_temp = torch.tensor(timestep-249, device=latent.device)
+        timestep_temp = torch.tensor(timestep-1000/number_of_steps, device=latent.device)
        
         noise_pred = self.unet(
             latent_model_input,

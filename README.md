@@ -36,7 +36,7 @@ cd InstantEdit
 ```
 2. Create and activate the Conda environment:
 ```
-conda env create -f environment.yml
+conda env create -f environment.yaml
 conda activate InstantEdit
 ```
 ### Run PIE Evaluation
