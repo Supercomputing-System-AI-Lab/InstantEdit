@@ -8,8 +8,8 @@
  University of Illinois Urbana-Champaign&nbsp;
 
 
-[![arXiv](https://img.shields.io/badge/arXiv-2412.01827-A42C25?style=flat&logo=arXiv&logoColor=A42C25)]()
-<!-- [![Project](https://img.shields.io/badge/Project-Page-green?style=flat&logo=Google%20chrome&logoColor=green)]()  -->
+[![arXiv](https://img.shields.io/badge/arXiv-2508.06033-A42C25?style=flat&logo=arXiv&logoColor=A42C25)](https://arxiv.org/abs/2508.06033)
+[![Project](https://img.shields.io/badge/Project-Page-green?style=flat&logo=Google%20chrome&logoColor=green)](https://supercomputing-system-ai-lab.github.io/projects/instantedit/) 
 
 
 <img src="assets/diverse_edit.png" width="100%">  
